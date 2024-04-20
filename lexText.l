@@ -4,7 +4,7 @@
         #include <stdlib.h>
 %}
 
-// Regular definitions
+// Regular expressions
 number [0-9]+
 op     [-+*/=]
 letter [A-Za-z]
