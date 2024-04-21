@@ -1,16 +1,16 @@
-//Auxillary declarations starts here
+/* Auxillary declarations starts here */
 %{
         #include <stdio.h>
         #include <stdlib.h>
 %}
 
-// Regular expressions
+/* Regular expressions */
 number [0-9]+
 op     [-+*/=]
 letter [A-Za-z]
 id     {letter}({letter}|{number})*
 
-// Translation rules
+/* Translation rules */
 %%
 {number} {printf("<number,%d>\n", atoi(yytext));}
 {op} {printf("<op,%s>\n",yytext);}
@@ -22,7 +22,7 @@ id     {letter}({letter}|{number})*
 
 %%
 
-// Auxiliary functions
+/* Auxiliary functions */
 int yywrap() {
     return 1;  // Always indicate end of input
 }
