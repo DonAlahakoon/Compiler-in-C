@@ -2,23 +2,59 @@
 %{
         #include <stdio.h>
         #include <stdlib.h>
+	#include "y.tab.h"
+    
+    	 int countn=0;       /* for keeping track of the line number */
 %}
 
 /* Regular expressions */
-number [0-9]+
-op     [-+*/=]
+%option yylineno
+
+digit [0-9]
 letter [A-Za-z]
-id     {letter}({letter}|{number})*
+id     {letter}({letter}|{digit})*
+unary "++"|"--"
 
 /* Translation rules */
 %%
-{number} {printf("<number,%d>\n", atoi(yytext));}
-{op} {printf("<op,%s>\n",yytext);}
-{id} {printf("<id, %s>\n",yytext);}
 
-[\t \n]  ;  // Ignore whitespace and newline characters
 
-.        { printf("Error: Unrecognized character '%s'\n", yytext); }
+"printf"                    {  return PRINTFF; }
+"scanf"                     {  return SCANFF; }
+"int"                       {  return INT; }
+"float"                     {  return FLOAT; }
+"char"                      {  return CHAR; }
+"void"                      {  return VOID; }
+"return"                    {  return RETURN; }
+"for"	                    {  return FOR; }
+"if"	                    {  return IF; }
+"else"	                    {  return ELSE; }
+^"#include"[ ]*<.+\.h>      {  return INCLUDE; }
+"true"                      {  return TRUE; }
+"false"                     {  return FALSE; }
+[-]?{digit}+                {  return NUMBER; }
+[-]?{digit}+\.{digit}{1,6}  {  return FLOAT_NUM; }
+{id}				 {  return ID; }
+{unary}                     {  return UNARY; }
+"<="                        {  return LE; }
+">="                        {  return GE; }
+"=="                        {  return EQ; }
+"!="                        {  return NE; }
+">"	                        {  return GT; }
+"<"	                        {  return LT; }
+"&&"	                    {  return AND; }
+"||"	                    {  return OR; }
+"+"                         {  return ADD; }
+"-"                         {  return SUBTRACT; }
+"/"                         {  return DIVIDE; }
+"*"                         {  return MULTIPLY; }
+\/\/.*                      { ; }
+\/\*(.*\n)*.*\*\/           { ; } 
+[ \t]*                      { ; }
+[\n]                        { countn++; }
+.	                        { return *yytext; }
+["].*["]                    {  return STR; }
+['].[']                     {  return CHARACTER; }
 
 %%
 
@@ -26,14 +62,5 @@ id     {letter}({letter}|{number})*
 int yywrap() {
     return 1;  // Always indicate end of input
 }
-int main()
-{
-        printf("Enter text to tokenize (Ctrl+D to end):\n");
 
-        // Set yyin to stdin (standard input)
-         yyin = stdin;
 
-        // Call yylex to start tokenizing from user input
-        yylex();
-        return 0;
-}
