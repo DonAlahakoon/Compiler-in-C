@@ -1,7 +1,5 @@
 /* Auxillary declarations starts here */
 %{
-        #include <stdio.h>
-        #include <stdlib.h>
 	#include "y.tab.h"
     
     	 int countn=0;       /* for keeping track of the line number */
