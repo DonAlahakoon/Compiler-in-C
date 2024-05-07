@@ -46,11 +46,13 @@ unary "++"|"--"
 "-"                         {  return SUBTRACT; }
 "/"                         {  return DIVIDE; }
 "*"                         {  return MULTIPLY; }
-\/\/.*                      { ; }
-\/\*(.*\n)*.*\*\/           { ; } 
+"("                         { return LPAREN;}
+")"                         {return RPAREN;}
+\/\/.*                      { ; } 					/* Handle the single line comments */
+\/\*(.*\n)*.*\*\/           { ; } 					/* Handle the multi line comments*/
 [ \t]*                      { ; }
 [\n]                        { countn++; }
-.	                        { return *yytext; }
+.	                        { return *yytext; }			/* Handles all other symbols */
 ["].*["]                    {  return STR; }
 ['].[']                     {  return CHARACTER; }
 
