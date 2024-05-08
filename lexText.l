@@ -32,7 +32,7 @@ unary "++"|"--"
 "false"                     {  return FALSE; }
 [-]?{digit}+                {  return NUMBER; }
 [-]?{digit}+\.{digit}{1,6}  {  return FLOAT_NUM; }
-{id}				 {  return ID; }
+{letter}				 { yylval.id = yytext[0]; return ID; }
 {unary}                     {  return UNARY; }
 "<="                        {  return LE; }
 ">="                        {  return GE; }
